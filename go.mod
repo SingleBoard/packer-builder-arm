@@ -3,6 +3,7 @@ module github.com/mkaczanowski/packer-builder-arm
 require (
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/dustin/go-humanize v1.0.0
+	github.com/google/btree v1.0.0 // indirect
 	github.com/hashicorp/go-checkpoint v0.5.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/hashicorp/go-getter v1.4.0
@@ -16,6 +17,7 @@ require (
 
 	github.com/ugorji/go v0.0.0-20180813092308-00b869d2f4a5 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
+	google.golang.org/api v0.20.0 // indirect
 )
 
 go 1.13

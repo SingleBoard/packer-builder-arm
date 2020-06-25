@@ -14,6 +14,8 @@ RUN go build -o packer-builder-arm
 FROM ubuntu:eoan
 
 RUN apt-get update -qq \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -qqy software-properties-common \
+ && apt-add-repository --yes --update ppa:ansible/ansible \
  && DEBIAN_FRONTEND=noninteractive apt-get install -qqy \
   qemu-user-static \
   kpartx \
@@ -21,6 +23,7 @@ RUN apt-get update -qq \
   wget \
   curl \
   sudo \
+  ansible \
  && rm -rf /var/lib/apt/lists/*
 
 ENV PACKER_VERSION 1.4.5

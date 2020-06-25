@@ -19,3 +19,4 @@
 # Cache
 packer_cache
 packer-builder-arm
+.vagrant/
