@@ -1,0 +1,32 @@
+name: Build Plugin
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+#       - name: Prepare build environment
+#         using: "Docker"
+#         image: "docker://golang:buster"
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.13
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Get dependencies
+      run: go mod download -v
+
+    - name: Build
+      run: go build -v -o packer-builder-arm .
