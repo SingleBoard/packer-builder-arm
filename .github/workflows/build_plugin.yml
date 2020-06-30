@@ -25,5 +25,11 @@ jobs:
     - name: Get dependencies
       run: go mod download
 
-    - name: Build
+    - name: Build packer-builder-arm from source
       run: go build -o packer-builder-arm -v
+    
+    - name: Upload compiled packer-builder-arm plugin
+      uses: actions/upload-artifact@v2
+      with:
+        name: packer-builder-arm_binary-$GITHUB_SHA
+        path: packer-builder-arm
