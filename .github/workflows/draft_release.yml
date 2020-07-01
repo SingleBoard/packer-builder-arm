@@ -1,35 +1,49 @@
-name: Build Plugin
+name: Create a new draft release
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - master
+  # pull_request:
+  #   branches: [master]
 
 jobs:
-
-  build:
-    name: Build
+  draft_release:
+    name: Draft new release
     runs-on: ubuntu-latest
+
     steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.13
+        id: go
 
-    - name: Set up Go 1.x
-      uses: actions/setup-go@v2
-      with:
-        go-version: ^1.13
-      id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+      - name: Get module dependencies
+        run: go mod download
 
-    - name: Get dependencies
-      run: go mod download
+      - name: Create an output directory
+        run: mkdir .build
 
-    - name: Build packer-builder-arm from source
-      run: go build -o packer-builder-arm -v
-    
-    - name: Upload compiled packer-builder-arm plugin
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ format('packer-builder-arm_binary-{0}', github.sha) }}
-        path: packer-builder-arm
+      - name: Build plugin from source
+        run: go build -o .build/packer-builder-arm -v
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          draft: true
+          title: "Development Build"
+          files: |
+            .build/*
+            LICENSE
+
+      - name: Upload compiled packer-builder-arm plugin
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ format('packer-builder-arm_binary-{0}', github.sha) }}
+          path: packer-builder-arm
