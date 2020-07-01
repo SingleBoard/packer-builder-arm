@@ -41,9 +41,3 @@ jobs:
           files: |
             .build/*
             LICENSE
-
-      - name: Upload compiled packer-builder-arm plugin
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ format('packer-builder-arm_binary-{0}', github.sha) }}
-          path: packer-builder-arm
