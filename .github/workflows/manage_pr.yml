@@ -1,13 +1,36 @@
-name: Create a new draft release
+name: Manage Pull Request
 
 on:
-  push:
-    branches:
-      - master
-  # pull_request:
-  #   branches: [master]
+  # push:
+  #   branches:
+  #     - master
+  pull_request:
+    types:
+      - opened
+      - labeled
+      - unlabeled
+      - synchronize
 
 jobs:
+  check_labels:
+    name: Check PR for required labels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Require semantic versioning labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 1
+          labels: "semver:breaking, semver:feature, semver:patch, chore, ci"
+
+      - name: Require conventional commit labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: minimum
+          count: 1
+          labels: "chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
+
   draft_release:
     name: Draft new release
     runs-on: ubuntu-latest
@@ -25,19 +48,18 @@ jobs:
       - name: Get module dependencies
         run: go mod download
 
-      - name: Create an output directory
-        run: mkdir .build
-
       - name: Build plugin from source
-        run: go build -o .build/packer-builder-arm -v
+        run: |
+          mkdir .build
+          go build -o .build/packer-builder-arm -v
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          draft: true
-          title: "Development Build"
-          files: |
-            .build/*
-            LICENSE
+      # - uses: "marvinpinto/action-automatic-releases@latest"
+      #   with:
+      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      #     automatic_release_tag: "latest"
+      #     prerelease: true
+      #     draft: true
+      #     title: "Development Build"
+      #     files: |
+      #       .build/*
+      #       LICENSE
