@@ -11,6 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Don't generate a new release if PR still has WIP label
+      - name: Prohibit WIP labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 0
+          labels: "WIP"
+      # Don't generate a new release if PR was closed with a
+      # wontmerge, wontfix, or duplicate label
+      - name: Prohibit merge-blocking labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 0
+          labels: "wontmerge, wontfix, duplicate"
 
       # Action for generating tag release can be found at
       # https://github.com/marketplace/actions/semver-release
