@@ -36,6 +36,24 @@ jobs:
           count: 1
           labels: "chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
 
+  check_blocker_labels:
+    name: Check PR for merge-blocking labels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prohibit WIP labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 0
+          labels: "WIP, wip"
+      - name: Prohibit merge-blocking labels
+        uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 0
+          labels: "blocked, do not merge"
+
   # draft_release:
   #   name: Draft new release
   #   runs-on: ubuntu-latest
