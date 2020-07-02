@@ -46,13 +46,13 @@ jobs:
         with:
           mode: exactly
           count: 0
-          labels: "WIP, wip"
+          labels: "WIP"
       - name: Prohibit merge-blocking labels
         uses: mheap/github-action-required-labels@v1
         with:
           mode: exactly
           count: 0
-          labels: "blocked, do not merge"
+          labels: "wontmerge, wontfix, duplicate"
 
   # draft_release:
   #   name: Draft new release
