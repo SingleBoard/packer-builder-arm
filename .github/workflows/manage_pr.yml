@@ -12,6 +12,14 @@ on:
       - synchronize
 
 jobs:
+  enforce_conformity:
+    name: Use Conform to enforce build pipeline policies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Conform enforcer action
+        uses: talos-systems/conform@v0.1.0-alpha.19
+
   check_semver_labels:
     name: Check PR for required semantic versioning labels
     runs-on: ubuntu-latest
