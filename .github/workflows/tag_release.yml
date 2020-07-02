@@ -11,11 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # Action for generating tag release can be found at
+      # https://github.com/marketplace/actions/semver-release
       - name: Generate release tag
         uses: K-Phoen/semver-release-action@master
         with:
           release_branch: master
           release_strategy: tag
-          tag_format: "v%breaking%.%feature%.%patch%"
+          tag_format: "v%semver:breaking%.%semver:feature%.%semver:patch%"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
