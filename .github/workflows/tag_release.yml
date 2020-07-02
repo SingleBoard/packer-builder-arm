@@ -30,10 +30,36 @@ jobs:
       # Action for generating tag release can be found at
       # https://github.com/marketplace/actions/semver-release
       - name: Generate release tag
+        id: semver
         uses: K-Phoen/semver-release-action@master
         with:
           release_branch: master
-          release_strategy: tag
+          release_strategy: none
           tag_format: "v%semver:breaking%.%semver:feature%.%semver:patch%"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEMVER_TAG: ${{ outputs.tag }}
+
+      - name: Generate changelog
+        id: changelog
+        uses: heinrichreimer/action-github-changelog-generator@v2.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          dateFormat: "%Y-%m-%d"
+          output: CHANGELOG.md
+          breakingLabel: "## Breaking changes"
+          breakingLabels: "semver:breaking"
+          enhancementLabel: "## Implemented enhancements"
+          enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
+          bugsLabel: "## Fixed bugs"
+          bugsLabels: "semver:patch,fix,revert"
+          addSections:
+            choreChanges:
+              prefix: "## Misc. Improvements"
+              labels:
+                - chore
+                - ci
+                - style
+          futureRelease: "${{ env.SEMVER_TAG }}"
+
+
