@@ -1,0 +1,21 @@
+name: Tag a new release using Semantic Versioning
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  tag_release:
+    name: Tag a new release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate release tag
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: master
+          release_strategy: tag
+          tag_format: "v%breaking%.%feature%.%patch%"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
