@@ -1,12 +1,15 @@
 name: Tag a new release using Semantic Versioning
 
 on:
-  pull_request:
-    types:
-      - synchronize
-      - closed
-      - opened
-      - edited
+  push:
+    branches:
+      - master
+  # pull_request:
+  #   types:
+  #     - synchronize
+  #     - closed
+  #     - opened
+  #     - edited
 
 jobs:
   update_release_draft:
