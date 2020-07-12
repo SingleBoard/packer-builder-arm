@@ -38,7 +38,7 @@ jobs:
         run: |
           .github/scripts/generate_release_notes.sh
 
-          # cat .tmp/RELEASE_NOTES.md
+          cat .tmp/CHANGELOG.md
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_TAG: ${{ steps.semver.outputs.tag_name }}

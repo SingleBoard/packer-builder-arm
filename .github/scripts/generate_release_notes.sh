@@ -24,9 +24,8 @@ github_changelog_generator \
     --output ".tmp/CHANGELOG.md" \
     --pull-requests \
     --author \
-    --header-label "## Changes in this release" \
-    --unreleased-label "REMOVE_THIS_LINE" \
-    --no-compare-link \
+    --header-label "# Changelog" \
+    --unreleased-label "Unreleased (To be released in $NEXT_TAG)" \
     --usernames-as-github-logins \
     --breaking-label "### Breaking Changes:" \
     --breaking-labels "semver:breaking" \
@@ -53,8 +52,8 @@ github_changelog_generator \
     }"
 
 sed -i '/This Changelog was automatically generated/d' .tmp/CHANGELOG.md
-sed -i '/REMOVE_THIS_LINE/{N;d}' .tmp/CHANGELOG.md
-sed -n '/## \[v/q;p' .tmp/CHANGELOG.md > .tmp/RELEASE_NOTES.md
+# sed -i '/REMOVE_THIS_LINE/{N;d}' .tmp/CHANGELOG.md
+# sed -n '/## \[v/q;p' .tmp/CHANGELOG.md > .tmp/RELEASE_NOTES.md
 
 echo ::set-output name=release_notes::"$(cat ".tmp/RELEASE_NOTES.md")"
 
