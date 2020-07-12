@@ -1,20 +1,13 @@
 name: Manage Repository Labels
 
 on:
-  push:
-    branches:
-      - master
   label:
     types:
       - created
       - edited
       - deleted
-  pull_request:
-    types:
-      - opened
-  issues:
-    types:
-      - opened
+  schedule:
+    - cron: "45 4 * * *"
 
 jobs:
   sync_labels:
