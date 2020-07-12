@@ -3,19 +3,81 @@ name: Tag a new release using Semantic Versioning
 on:
   pull_request:
     types:
+      - synchronize
       - closed
+      - opened
+      - edited
 
 jobs:
-  tag_release:
-    name: Tag a new release
+  update_release_draft:
+    name: Update the next release draft for the project
     runs-on: ubuntu-latest
 
     steps:
-      - name: Generate release tag
-        uses: K-Phoen/semver-release-action@master
+      - uses: release-drafter/release-drafter@v5
         with:
-          release_branch: master
-          release_strategy: tag
-          tag_format: "v%breaking%.%feature%.%patch%"
+          config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # tag_release:
+  #   name: Tag a new release
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+      # Don't generate a new release if PR still has WIP label
+      # - name: Prohibit WIP labels
+      #   uses: mheap/github-action-required-labels@v1
+      #   with:
+      #     mode: exactly
+      #     count: 0
+      #     labels: "WIP"
+
+      # Don't generate a new release if PR was closed with a
+      # wontmerge, wontfix, or duplicate label
+      # - name: Prohibit merge-blocking labels
+      #   uses: mheap/github-action-required-labels@v1
+      #   with:
+      #     mode: exactly
+      #     count: 0
+      #     labels: "wontmerge, wontfix, duplicate"
+
+      # # Action for generating tag release can be found at
+      # # https://github.com/marketplace/actions/semver-release
+      # - name: Generate release tag
+      #   id: semver
+      #   uses: K-Phoen/semver-release-action@master
+      #   with:
+      #     release_branch: master
+      #     release_strategy: none
+      #     tag_format: "v%semver:breaking%.%semver:feature%.%semver:patch%"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Generate changelog
+      #   id: changelog
+      #   uses: heinrichreimer/action-github-changelog-generator@v2.1.1
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     dateFormat: "%Y-%m-%d"
+      #     output: CHANGELOG.md
+      #     breakingLabel: "## Breaking changes"
+      #     breakingLabels: "semver:breaking"
+      #     enhancementLabel: "## Implemented enhancements"
+      #     enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
+      #     bugsLabel: "## Fixed bugs"
+      #     bugsLabels: "semver:patch,fix,revert"
+      #     futureRelease: "${{ env.SEMVER_TAG }}"
+      #     addSections: >
+      #       {
+      #         "choreChanges": {
+      #           "prefix": "## Misc. Improvements",
+      #           "labels": [
+      #             "chore",
+      #             "ci",
+      #             "style"
+      #           ]
+      #         }
+      #       }
+      #   env:
+      #     SEMVER_TAG: ${{ steps.semver.outputs.tag }}

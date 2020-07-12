@@ -1,0 +1,30 @@
+name: Manage Repository Labels
+
+on:
+  push:
+    branches:
+      - master
+  label:
+    types:
+      - created
+      - edited
+      - deleted
+  pull_request:
+    types:
+      - opened
+  issues:
+    types:
+      - opened
+
+jobs:
+  sync_labels:
+    name: Sync repo labels with declarative label definition
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: micnncim/action-label-syncer@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          manifest: .github/labels.yml

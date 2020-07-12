@@ -1,0 +1,63 @@
+---
+# Semantic versioning labels
+- name: semver:breaking
+  description: "Major: Update contains a breaking change"
+  color: 3868a8
+- name: semver:feature
+  description: "Minor: Update contains a feature addition"
+  color: 648dc4
+- name: semver:patch
+  description: "Patch: Update contains a fix"
+  color: 9dc2f2
+
+# Feature/improvement labels
+- name: feature
+  description: New feature or enhancement
+  color: 0075ca
+- name: docs
+  description: Improvements or additions to documentation
+  color: 73b9eb
+- name: test
+  description: Improvements or additions to tests
+  color: 3ca5f0
+
+# Administrative label
+- name: chore
+  description: Changes that don't affect functionality
+  color: 8c8b94
+
+# Non-functional enhancement labels
+- name: ci
+  description: Enhancements to CI pipeline
+  color: 4e4c5c
+- name: style
+  description: Improvements to code style
+  color: 4e4c5c
+- name: refactor
+  description: Improvements to code structure
+  color: 4e4c5c
+- name: perf
+  description: Improvements to code performance
+  color: 4e4c5c
+
+# Fix/patch labels
+- name: fix
+  description: Fixing something broken
+  color: db4f4f
+- name: revert
+  description: Reverting something broken
+  color: db4f4f
+
+# Workflow status labels
+- name: WIP
+  description: Unfinished and not ready to merge
+  color: eeeeee
+- name: wontmerge
+  description: Prohibit PR from being merged
+  color: 333333
+- name: wontfix
+  description: This will not be worked on
+  color: 333333
+- name: duplicate
+  description: This issue or pull request already exists
+  color: 333333
