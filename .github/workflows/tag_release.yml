@@ -17,6 +17,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Cache build dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pipeline-deps
+        with:
+          path: /var/lib/docker
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('.github/**') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Draft a new GitHub release
         id: semver
         uses: release-drafter/release-drafter@v5
