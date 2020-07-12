@@ -1,0 +1,49 @@
+---
+name-template: "v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+
+categories:
+  - title: "### Breaking Changes"
+    labels:
+      - "semver:breaking"
+  - title: "### New Features"
+    labels:
+      - feat
+      - perf
+  - title: "### Bug Fixes"
+    labels:
+      - fix
+      - revert
+  - title: "### Documentation"
+    labels:
+      - docs
+  - title: "### Maintenance"
+    labels:
+      - chore
+      - ci
+      - refactor
+      - style
+      - test
+
+change-template: "- $TITLE by @$AUTHOR (#$NUMBER)"
+
+version-resolver:
+  major:
+    labels:
+      - "semver:breaking"
+  minor:
+    labels:
+      - "semver:feature"
+  patch:
+    labels:
+      - "semver:patch"
+  default: patch
+
+template: |
+  ## Release Notes
+
+  $CHANGES
+
+  ### Contributors to this Release
+
+  $CONTRIBUTORS

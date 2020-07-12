@@ -12,14 +12,27 @@ on:
       - synchronize
 
 jobs:
-  enforce_conformity:
-    name: Use Conform to enforce build pipeline policies
-    runs-on: ubuntu-latest
+  # enforce_conformity:
+  #   name: Use Conform to enforce build pipeline policies
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Conform enforcer action
-        uses: talos-systems/conform@v0.1.0-alpha.19
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Run Conform enforcer action
+  #       uses: talos-systems/conform@v0.1.0-alpha.19
+  # lint_commits:
+  #   name: Use commitlint to check commits
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Setup Node.js environment
+  #       uses: actions/setup-node@v2.1.0
+  #     - name: Install and configure commitlint
+  #       run: |
+  #         npm init -y
+  #         npm install --save-dev @commitlint/{config-conventional,cli}
+  #         echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
 
   check_semver_labels:
     name: Check PR for required semantic versioning labels
