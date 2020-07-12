@@ -25,6 +25,7 @@ jobs:
           config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELNOTES: ${{ steps.relnotes.outputs.release_notes }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -33,12 +34,11 @@ jobs:
       - name: Install changelog generator
         run: gem install github_changelog_generator
       - name: Run changelog generator
-        # run: .github/generate_changelog.sh
+        id: relnotes
         run: |
           .github/scripts/generate_release_notes.sh
 
-          cat RELEASE_NOTES.md
-          echo ""
+          # cat .tmp/RELEASE_NOTES.md
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_TAG: ${{ steps.semver.outputs.tag_name }}

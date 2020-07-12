@@ -6,24 +6,26 @@ categories:
   - title: "Breaking Changes"
     labels:
       - "semver:breaking"
-  - title: "New Features"
+  - title: "Implemented enhancements"
     labels:
+      - "semver:feature"
       - feat
+      - test
+      - refactor
       - perf
-  - title: "Bug Fixes"
+  - title: "Fixed bugs"
     labels:
+      - "semver:patch"
       - fix
       - revert
-  - title: "Documentation"
+  - title: "Docs Updates"
     labels:
       - docs
-  - title: "Maintenance"
+  - title: "Misc. Improvements"
     labels:
       - chore
       - ci
-      - refactor
       - style
-      - test
 
 change-template: "- $TITLE by @$AUTHOR (#$NUMBER)"
 

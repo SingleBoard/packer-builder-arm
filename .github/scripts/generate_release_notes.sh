@@ -31,7 +31,7 @@ github_changelog_generator \
     --breaking-label "### Breaking Changes:" \
     --breaking-labels "semver:breaking" \
     --enhancement-label "### Implemented enhancements" \
-    --enhancement-labels "semver:feature,feat,docs,test,refactor,perf" \
+    --enhancement-labels "semver:feature,feat,test,refactor,perf" \
     --bugs-label "### Fixed bugs" \
     --bug-labels "semver:patch,fix,revert" \
     --add-sections \
@@ -54,7 +54,9 @@ github_changelog_generator \
 
 sed -i '/This Changelog was automatically generated/d' .tmp/CHANGELOG.md
 sed -i '/REMOVE_THIS_LINE/{N;d}' .tmp/CHANGELOG.md
-sed -n '/## \[v/q;p' .tmp/CHANGELOG.md > RELEASE_NOTES.md
+sed -n '/## \[v/q;p' .tmp/CHANGELOG.md > .tmp/RELEASE_NOTES.md
+
+echo ::set-output name=release_notes::"$(cat ".tmp/RELEASE_NOTES.md")"
 
 # if [ -z "NEXT_TAG" ]; then NEXT_TAG="Unreleased"; fi
 
