@@ -12,16 +12,46 @@ on:
   #     - edited
 
 jobs:
-  update_release_draft:
+  draft_release:
     name: Update the next release draft for the project
     runs-on: ubuntu-latest
 
     steps:
-      - uses: release-drafter/release-drafter@v5
+      - name: Draft a new GitHub release
+        id: semver
+        uses: release-drafter/release-drafter@v5
         with:
           config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate changelog for release
+        id: release-changelog
+        uses: heinrichreimer/action-github-changelog-generator@v2.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          dateFormat: "%Y-%m-%d"
+          output: ""
+          breakingLabel: "## Breaking changes"
+          breakingLabels: "semver:breaking"
+          enhancementLabel: "## Implemented enhancements"
+          enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
+          bugsLabel: "## Fixed bugs"
+          bugsLabels: "semver:patch,fix,revert"
+          futureRelease: "${{ env.SEMVER_TAG }}"
+          addSections: >
+            {
+              "choreChanges": {
+                "prefix": "## Misc. Improvements",
+                "labels": [
+                  "chore",
+                  "ci",
+                  "style"
+                ]
+              }
+            }
+        env:
+          SEMVER_TAG: ${{ steps.semver.outputs.tag_name }}
 
   # tag_release:
   #   name: Tag a new release
@@ -56,31 +86,3 @@ jobs:
       #     tag_format: "v%semver:breaking%.%semver:feature%.%semver:patch%"
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Generate changelog
-      #   id: changelog
-      #   uses: heinrichreimer/action-github-changelog-generator@v2.1.1
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     dateFormat: "%Y-%m-%d"
-      #     output: CHANGELOG.md
-      #     breakingLabel: "## Breaking changes"
-      #     breakingLabels: "semver:breaking"
-      #     enhancementLabel: "## Implemented enhancements"
-      #     enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
-      #     bugsLabel: "## Fixed bugs"
-      #     bugsLabels: "semver:patch,fix,revert"
-      #     futureRelease: "${{ env.SEMVER_TAG }}"
-      #     addSections: >
-      #       {
-      #         "choreChanges": {
-      #           "prefix": "## Misc. Improvements",
-      #           "labels": [
-      #             "chore",
-      #             "ci",
-      #             "style"
-      #           ]
-      #         }
-      #       }
-      #   env:
-      #     SEMVER_TAG: ${{ steps.semver.outputs.tag }}

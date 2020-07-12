@@ -40,7 +40,7 @@ version-resolver:
   default: patch
 
 template: |
-  # Release Notes
+  # Changes since $PREVIOUS_TAG
 
   $CHANGES
 
