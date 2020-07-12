@@ -26,20 +26,48 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate changelog for release
-        id: release-changelog
-        uses: heinrichreimer/action-github-changelog-generator@v2.1.1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          dateFormat: "%Y-%m-%d"
-          output: ""
-          breakingLabel: "## Breaking changes"
-          breakingLabels: "semver:breaking"
-          enhancementLabel: "## Implemented enhancements"
-          enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
-          bugsLabel: "## Fixed bugs"
-          bugLabels: "semver:patch,fix,revert"
-          futureRelease: "${{ env.SEMVER_TAG }}"
+          ruby-version: 2.6
+      - name: Install changelog generator
+        run: gem install github_changelog_generator
+      - name: Run changelog generator
+        # run: .github/generate_changelog.sh
+        run: |
+          .github/scripts/generate_release_notes.sh
+
+          cat RELEASE_NOTES.md
+          echo ""
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_TAG: ${{ steps.semver.outputs.tag_name }}
+
+      # - name: Generate changelog for release
+      #   id: release-changelog
+      #   run: |
+      #     docker pull ferrarimarco/github-changelog-generator
+
+      # - name: Generate changelog for release
+      #   id: release-changelog
+      #   uses: heinrichreimer/action-github-changelog-generator@v2.1.1
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     dateFormat: "%Y-%m-%d"
+      #     pullRequests: true
+      #     prWoLabels: true
+      #     author: true
+      #     stripGeneratorNotice: true
+      #     output: ""
+      #     breakingLabel: "## Breaking changes"
+      #     breakingLabels: "semver:breaking"
+      #     enhancementLabel: "## Implemented enhancements"
+      #     enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
+      #     bugsLabel: "## Fixed bugs"
+      #     bugLabels: "semver:patch,fix,revert"
+      #     # futureRelease: "${{ env.SEMVER_TAG }}"
+      #   env:
+      #     SEMVER_TAG: ${{ steps.semver.outputs.tag_name }}
           # addSections: >
           #   {
           #     "choreChanges": {
@@ -51,8 +79,6 @@ jobs:
           #       ]
           #     }
           #   }
-        env:
-          SEMVER_TAG: ${{ steps.semver.outputs.tag_name }}
 
   # tag_release:
   #   name: Tag a new release
