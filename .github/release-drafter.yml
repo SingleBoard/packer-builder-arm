@@ -3,21 +3,21 @@ name-template: "v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 
 categories:
-  - title: "### Breaking Changes"
+  - title: "Breaking Changes"
     labels:
       - "semver:breaking"
-  - title: "### New Features"
+  - title: "New Features"
     labels:
       - feat
       - perf
-  - title: "### Bug Fixes"
+  - title: "Bug Fixes"
     labels:
       - fix
       - revert
-  - title: "### Documentation"
+  - title: "Documentation"
     labels:
       - docs
-  - title: "### Maintenance"
+  - title: "Maintenance"
     labels:
       - chore
       - ci
@@ -40,10 +40,10 @@ version-resolver:
   default: patch
 
 template: |
-  ## Release Notes
+  # Release Notes
 
   $CHANGES
 
-  ### Contributors to this Release
+  ## Contributors to this Release
 
   $CONTRIBUTORS
