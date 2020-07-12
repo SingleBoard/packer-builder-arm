@@ -37,7 +37,7 @@ jobs:
           enhancementLabel: "## Implemented enhancements"
           enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
           bugsLabel: "## Fixed bugs"
-          bugsLabels: "semver:patch,fix,revert"
+          bugLabels: "semver:patch,fix,revert"
           futureRelease: "${{ env.SEMVER_TAG }}"
           addSections: >
             {
