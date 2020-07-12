@@ -42,7 +42,9 @@ version-resolver:
   default: patch
 
 template: |
-  # Changes since $PREVIOUS_TAG
+  # Changes in this release
+
+  The following changes, enhancements, and fixes have been made since version $PREVIOUS_TAG.
 
   $CHANGES
 
