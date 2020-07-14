@@ -14,6 +14,10 @@ jobs:
       - name: Checkout the project into the local workspace
         uses: actions/checkout@v2
 
+      # Create a new release draft using the GitHub releases feature.
+      # Include release notes that correspond to the contents of the
+      # changelog for this release.
+      # Action: https://github.com/release-drafter/release-drafter
       - name: Draft a new GitHub release with release notes
         id: github_release
         uses: release-drafter/release-drafter@v5
@@ -22,6 +26,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Create a changelog for the recent versions of the project
+      # using the github_changelog_generator tool. This requires first
+      # installing Ruby in the environment. The changelog generator is
+      # run using the script and config in generate_changelog.sh
+      # Software: https://github.com/github-changelog-generator/github-changelog-generator
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -31,55 +40,25 @@ jobs:
       - name: Run changelog generator
         id: generate_changelog
         run: |
-          .github/scripts/generate_release_notes.sh
+          .github/scripts/generate_changelog.sh
 
           echo "Generated changelog:"
           cat CHANGELOG.md
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_TAG: ${{ steps.github_release.outputs.tag_name }}
-      - run: ls -la
       
-      # - uses: EndBug/add-and-commit@v4
-      #   with:
-      #     add: "CHANGELOG.md"
-
-      # - name: Generate changelog for release
-      #   id: release-changelog
-      #   run: |
-      #     docker pull ferrarimarco/github-changelog-generator
-
-      # - name: Generate changelog for release
-      #   id: release-changelog
-      #   uses: heinrichreimer/action-github-changelog-generator@v2.1.1
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     dateFormat: "%Y-%m-%d"
-      #     pullRequests: true
-      #     prWoLabels: true
-      #     author: true
-      #     stripGeneratorNotice: true
-      #     output: ""
-      #     breakingLabel: "## Breaking changes"
-      #     breakingLabels: "semver:breaking"
-      #     enhancementLabel: "## Implemented enhancements"
-      #     enhancementLabels: "semver:feature,feat,docs,test,refactor,perf"
-      #     bugsLabel: "## Fixed bugs"
-      #     bugLabels: "semver:patch,fix,revert"
-      #     # futureRelease: "${{ env.SEMVER_TAG }}"
-      #   env:
-      #     SEMVER_TAG: ${{ steps.semver.outputs.tag_name }}
-          # addSections: >
-          #   {
-          #     "choreChanges": {
-          #       "prefix": "## Misc. Improvements",
-          #       "labels": [
-          #         "chore",
-          #         "ci",
-          #         "style"
-          #       ]
-          #     }
-          #   }
+      # Commit the newly-generated changelog to the repository as a
+      # standalone commit.
+      # Action: https://github.com/marketplace/actions/add-commit
+      - name: Commit the update to the changelog
+        uses: EndBug/add-and-commit@v4
+        with:
+          add: "CHANGELOG.md"
+          message: "chore: update changelog for ${{ env.NEXT_TAG }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_TAG: ${{ steps.github_release.outputs.tag_name }}
 
   # tag_release:
   #   name: Tag a new release
