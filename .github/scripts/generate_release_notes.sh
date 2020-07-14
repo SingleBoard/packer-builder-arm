@@ -15,17 +15,17 @@ if [ -z "$INPUT_USER" ]; then INPUT_USER=$(echo "$INPUT_REPO" | cut -d / -f 1 );
 # Set project input from repository, if not set.
 if [ -z "$INPUT_PROJECT" ]; then INPUT_PROJECT=$(echo "$INPUT_REPO" | cut -d / -f 2- ); fi
 
-mkdir .tmp
+# Generate the changelog
 github_changelog_generator \
     --user $INPUT_USER \
     --project $INPUT_PROJECT \
     --token $TOKEN \
     --date-format "%Y-%m-%d" \
-    --output ".tmp/CHANGELOG.md" \
+    --output "CHANGELOG.md" \
     --pull-requests \
     --author \
     --header-label "# Changelog" \
-    --unreleased-label "Unreleased (To be released in $NEXT_TAG)" \
+    --unreleased-label "$NEXT_TAG (UNRELEASED)" \
     --usernames-as-github-logins \
     --breaking-label "### Breaking Changes:" \
     --breaking-labels "semver:breaking" \
@@ -44,6 +44,7 @@ github_changelog_generator \
         \"misc\": {
             \"prefix\": \"### Misc. Improvements\",
             \"labels\": [
+                \"build\",
                 \"chore\",
                 \"ci\",
                 \"style\"
@@ -51,19 +52,9 @@ github_changelog_generator \
         }
     }"
 
-sed -i '/This Changelog was automatically generated/d' .tmp/CHANGELOG.md
-# sed -i '/REMOVE_THIS_LINE/{N;d}' .tmp/CHANGELOG.md
-# sed -n '/## \[v/q;p' .tmp/CHANGELOG.md > .tmp/RELEASE_NOTES.md
+# Remove the "automatically generated" message from the end of the changelog
+sed -i '/This Changelog was automatically generated/d' CHANGELOG.md
 
-echo ::set-output name=release_notes::"$(cat ".tmp/RELEASE_NOTES.md")"
-
-# if [ -z "NEXT_TAG" ]; then NEXT_TAG="Unreleased"; fi
-
-# github_changelog_generator \
-#     --user $INPUT_USER \
-#     --project $INPUT_PROJECT \
-#     --date-format "%Y-%m-%d" \
-#     --output "" \
-#     --pull-requests \
-#     --author \
-#     --unreleased-label "${NEXT_TAG}"
+# Export the contents of the CHANGELOG.md file as a GitHub Action
+# output variable named `changelog`
+echo ::set-output name=changelog::"$(cat "CHANGELOG.md")"

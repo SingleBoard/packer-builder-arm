@@ -1,15 +1,9 @@
-name: Tag a new release using Semantic Versioning
+name: Draft a new release
 
 on:
   push:
     branches:
       - master
-  # pull_request:
-  #   types:
-  #     - synchronize
-  #     - closed
-  #     - opened
-  #     - edited
 
 jobs:
   draft_release:
@@ -17,31 +11,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Draft a new GitHub release
-        id: semver
+      - name: Checkout the project into the local workspace
+        uses: actions/checkout@v2
+
+      - name: Draft a new GitHub release with release notes
+        id: github_release
         uses: release-drafter/release-drafter@v5
         with:
           config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELNOTES: ${{ steps.relnotes.outputs.release_notes }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-      - name: Install changelog generator
+      - name: Install github_changelog_generator
         run: gem install github_changelog_generator
       - name: Run changelog generator
-        id: relnotes
+        id: generate_changelog
         run: |
           .github/scripts/generate_release_notes.sh
 
-          cat .tmp/CHANGELOG.md
+          echo "Generated changelog:"
+          cat CHANGELOG.md
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEXT_TAG: ${{ steps.semver.outputs.tag_name }}
+          NEXT_TAG: ${{ steps.github_release.outputs.tag_name }}
+      - run: ls -la
+      
+      # - uses: EndBug/add-and-commit@v4
+      #   with:
+      #     add: "CHANGELOG.md"
 
       # - name: Generate changelog for release
       #   id: release-changelog
