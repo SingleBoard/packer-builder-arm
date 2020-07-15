@@ -16,15 +16,15 @@
   color: 0075ca
 - name: docs
   description: Improvements or additions to documentation
-  color: 73b9eb
+  color: 0075ca
 - name: test
   description: Improvements or additions to tests
-  color: 3ca5f0
+  color: 0075ca
 
 # Administrative label
 - name: chore
   description: Changes that don't affect functionality
-  color: 8c8b94
+  color: 4e4c5c
 
 # Non-functional enhancement labels
 - name: ci
@@ -52,12 +52,12 @@
 - name: WIP
   description: Unfinished and not ready to merge
   color: eeeeee
-- name: wontmerge
+- name: ">Rejected/wontmerge"
   description: Prohibit PR from being merged
-  color: 333333
-- name: wontfix
+  color: de4e4e
+- name: ">Rejected/wontfix"
   description: This will not be worked on
-  color: 333333
-- name: duplicate
+  color: de4e4e
+- name: ">Rejected/duplicate"
   description: This issue or pull request already exists
-  color: 333333
+  color: de4e4e
