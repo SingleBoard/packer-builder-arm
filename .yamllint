@@ -1,0 +1,27 @@
+---
+
+extends: default
+
+rules:
+  colons:
+    max-spaces-before: 0
+    max-spaces-after: 10
+  comments:
+    require-starting-space: true
+    ignore-shebangs: true
+    min-spaces-from-content: 1
+  document-start: disable
+  empty-lines:
+    max: 1
+    max-start: 2
+    level: warning
+  hyphens:
+    max-spaces-after: 1
+  indentation:
+    indent-sequences: true
+    spaces: 2
+  line-length:
+    max: 750
+    level: warning
+  truthy:
+    check-keys: false
