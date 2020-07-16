@@ -18,8 +18,8 @@
 [docker-pulls]: https://img.shields.io/docker/pulls/mkaczanowski/packer-builder-arm
 [docker-size]: https://img.shields.io/docker/image-size/mkaczanowski/packer-builder-arm
 
-
 This plugin allows you to build or extend ARM system image. It operates in two modes:
+
 * new - creates empty disk image and populates the rootfs on it
 * reuse - uses already existing image as the base
 * resize - uses already existing image but resize given partition (ie. root)
