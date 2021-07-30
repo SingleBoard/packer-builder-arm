@@ -2,7 +2,9 @@
 
 set -o errtrace -o nounset -o pipefail -o errexit
 
-bash /register --reset -p yes >/dev/null 2>&1
+echo "uname -a: " $(uname -a)
+
+/usr/bin/binfmt --install all
 
 PACKER=/bin/packer
 
@@ -21,6 +23,8 @@ if [ "${#EXTRA_SYSTEM_PACKAGES[@]}" -gt 0 ]; then
     apt-get update
     apt-get install -y --no-install-recommends "${EXTRA_SYSTEM_PACKAGES[@]}"
 fi
+
+export DONT_SETUP_QEMU=1
 
 echo running "${PACKER}" "${@}"
 

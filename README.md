@@ -45,8 +45,9 @@ Since the setup varies a lot for different hardware types, the example configura
 * parallella (Ubuntu)
 * raspberry-pi (Archlinux ARM, Raspbian)
 * raspberry-pi-3 (Archlinux ARM (armv8))
-* raspberry-pi-4 (Archlinux ARM (armv7))
+* raspberry-pi-4 (Archlinux ARM (armv7), Ubuntu 20.04 LTS))
 * wandboard (Archlinux ARM)
+* armv7 generic (Alpine, Archlinux ARM)
 
 # Quick start
 ```
@@ -68,7 +69,7 @@ More system packages (e.g. bmap-tools, zstd) can be added via the parameter `-ex
 docker run --rm --privileged -v /dev:/dev -v ${PWD}:/build mkaczanowski/packer-builder-arm build boards/raspberry-pi/raspbian.json -extra-system-packages=bmap-tools,zstd
 ```
 
-### Usage via local container build:
+### Usage via local container build (supports amd64/aarch64 hosts):
 Build the container locally:
 ```
 docker build -t packer-builder-arm -f docker/Dockerfile .
@@ -177,22 +178,32 @@ rootfs archive instead of image:
 ## Resizing image
 Currently resizing is only limited to expanding single `ext{2,3,4}` partition with `resize2fs`. This is often requested feature where already built image is given and we need to expand the main partition to accomodate changes made in provisioner step (ie. installing packages).
 
-To resize a partition you need to select `resize` mode and set selected partition size to `0`, for example:
+To resize a partition you need to set `image_build_method` to `resize` mode and set selected partition size to `0`, for example:
 ```
-"image_partitions": [
+"builders": [
   {
-    "name": "boot",
-    ...
-  },
-  {
-    "name": "root",
-    "size": "0",
+    "type": "arm",
+    "image_build_method": "resize",
+    "image_partitions": [
+      {
+        "name": "boot",
+        ...
+      },
+      {
+        "name": "root",
+        "size": "0",
+        ...
+      }
+    ],
     ...
   }
-],
+]
 ```
 
-Complete example: `boards/raspberry-pi/raspbian-resize.json`
+Complete examples:
+
+- [`boards/raspberry-pi/raspbian-resize.json`](./boards/raspberry-pi/raspbian-resize.json)
+- [`boards/beaglebone-black/ubuntu.hcl`](./boards/beaglebone-black/ubuntu.hcl)
 
 ## Docker
 With `artifice` plugin you can pass rootfs archive to docker plugins
@@ -225,6 +236,20 @@ For more examples please see:
 ```
 tree boards/
 ```
+
+# Troubleshooting
+Many of the reported issues are platform/OS specific. If you happen to have
+problems, the first question you should ask yourself is:
+> Is my setup faulty? or is there an actual issue?
+
+To answer that question, I'd recommend reproducing the error on the VM, for
+instance:
+```
+cd packer-builder-arm
+vagrant up
+vagrant provision
+```
+> Note: For this the disksize plugin is needed if not already installed `vagrant plugin install vagrant-disksize`
 
 # Demo
 [![asciicast](https://asciinema.org/a/7ad1nm2Q7DRFVlHpqAknPolNo.svg)](https://asciinema.org/a/7ad1nm2Q7DRFVlHpqAknPolNo)
