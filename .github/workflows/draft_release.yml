@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout the project into the local workspace
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.2.0
 
       # Create a new release draft using the GitHub releases feature.
       # Include release notes that correspond to the contents of the
